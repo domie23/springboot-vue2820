@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.GonggongfuwuDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.gonggongfuwu_name as gonggongfuwuName
+        ,a.gonggongfuwu_address as gonggongfuwuAddress
+        ,a.gonggongfuwu_photo as gonggongfuwuPhoto
+        ,a.gonggongfuwu_types as gonggongfuwuTypes
+        ,a.yongtu_text as yongtuText
+        ,a.fuzeren as fuzeren
+        ,a.lianxidianhua as lianxidianhua
+        ,a.kaifangshijian as kaifangshijian
+        ,a.gonggongfuwu_content as gonggongfuwuContent
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.GonggongfuwuView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM gonggongfuwu  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.gonggongfuwuName != '' and params.gonggongfuwuName != null and params.gonggongfuwuName != 'null' ">
+                and a.gonggongfuwu_name like CONCAT('%',#{params.gonggongfuwuName},'%')
+            </if>
+            <if test=" params.gonggongfuwuAddress != '' and params.gonggongfuwuAddress != null and params.gonggongfuwuAddress != 'null' ">
+                and a.gonggongfuwu_address like CONCAT('%',#{params.gonggongfuwuAddress},'%')
+            </if>
+            <if test="params.gonggongfuwuTypes != null and params.gonggongfuwuTypes != ''">
+                and a.gonggongfuwu_types = #{params.gonggongfuwuTypes}
+            </if>
+            <if test=" params.yongtuText != '' and params.yongtuText != null and params.yongtuText != 'null' ">
+                and a.yongtu_text like CONCAT('%',#{params.yongtuText},'%')
+            </if>
+            <if test=" params.fuzeren != '' and params.fuzeren != null and params.fuzeren != 'null' ">
+                and a.fuzeren like CONCAT('%',#{params.fuzeren},'%')
+            </if>
+            <if test=" params.lianxidianhua != '' and params.lianxidianhua != null and params.lianxidianhua != 'null' ">
+                and a.lianxidianhua like CONCAT('%',#{params.lianxidianhua},'%')
+            </if>
+            <if test=" params.kaifangshijian != '' and params.kaifangshijian != null and params.kaifangshijian != 'null' ">
+                and a.kaifangshijian like CONCAT('%',#{params.kaifangshijian},'%')
+            </if>
+            <if test=" params.gonggongfuwuContent != '' and params.gonggongfuwuContent != null and params.gonggongfuwuContent != 'null' ">
+                and a.gonggongfuwu_content like CONCAT('%',#{params.gonggongfuwuContent},'%')
+            </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
